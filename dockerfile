@@ -32,15 +32,12 @@ COPY globus-connect-personal.sh /home/gridftp/globus-connect-personal.sh
 # Make the script executable
 RUN chmod +x /home/gridftp/globus-connect-personal.sh
 
-# Set the entrypoint to run the script conditionally
 CMD if [ "$START_GLOBUS" = "true" ]; then \
-    echo "Starting Globus Connect Personal"; \/
-    su gridftp; \
-    cd /home/gridftp; \
-    bash ./globus-connect-personal.sh; \
-    /bin/bash; \
+    echo "Starting Globus Connect Personal"; \
+    su gridftp -c 'cd /home/gridftp && source ./globus-connect-personal.sh'; \
+    /bin/bash -i; \
     else \
-    /bin/bash; \
+    /bin/bash -i; \
     fi
 
 # globus-connect-server-setup script needs these
