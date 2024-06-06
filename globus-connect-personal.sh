@@ -29,13 +29,13 @@ fi
 # Check /home/gridftp for existing GCP config
 if [ -d "$gcpconfigdir" ]; then
     # GCP endpoint config exists, start the endpoint
-    "./$gcpdir/globusconnectpersonal" -start -debug
+    "./$gcpdir/globusconnectpersonal" -start
 else
     # Check /data/gridftp-save for GCP endpoint config
     if [ -d "/home/ferroelectric/globus_config/$gcpconfigdir" ]; then
         # Copy existing config and then start GCP endpoint
         cp -p -r /home/ferroelectric/globus_config/.glob* ~
-        "./$gcpdir/globusconnectpersonal" -start -debug
+        "./$gcpdir/globusconnectpersonal" -start
     else
         # Can't find GCP config, sleep for an hour to let user set up config
         sleep 3600
