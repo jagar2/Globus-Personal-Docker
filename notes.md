@@ -11,13 +11,10 @@ docker build -t globus .
 To run the container, run the following command:
 
 ```bash
-docker run -it globus
+docker run -v /home/ferroelectric/data:/home/ferroelectric/data -v /home/ferroelectric/globus_config:/home/ferroelectric/globus_config -it globus 
 ```
 
-```bash
-su gridftp &&
 globus login --no-local-server
-```
 
 ```bash
 # Run the globus endpoint create command and capture the output
@@ -37,7 +34,17 @@ cd /home/gridftp/globusconnectpersonal-**/
 
 ./globusconnectpersonal -start &
 
+echo "/home/ferroelectric/data/,0,1" >> ~/.globusonline/lta/config-paths
+cp -p -r /home/gridftp/.globus* /home/ferroelectric/globus_config
+cp -p /home/gridftp/endpoint-info /home/ferroelectric/globus_config
+
 ```
 
 
+mkdir -p /data/gridftp-save
+chown gridftp.gridftp /data/gridftp-save
+cd ~gridftp/
+cp -p -r .globus* /data/gridftp-save/
+cp -p endpoint-info /data/gridftp-save/
 
+# now need to move files 

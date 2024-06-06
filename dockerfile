@@ -9,14 +9,15 @@ FROM rockylinux:9
 LABEL MAINTAINER Nadya Williams <nwilliams@ucsd.edu>
 LABEL CONTRIBUTER Kyle Krick <kkrick@sdsu.edu>
 
-RUN yum -y update; yum clean all && \
+VOLUME /home/ferroelectric/globus_config
+VOLUME /home/ferroelectric/data
+
+# Install necessary packages
+RUN yum -y update && \
     yum -y install wget rsync openssh-clients python pip && \
     yum -y install epel-release && \
-    yum -y update; yum clean all && \
+    yum -y update && \
     dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
-    # dnf -y install https://downloads.globus.org/globus-connect-server/stable/installers/repo/rpm/globus-repo-latest.noarch.rpm && \
-    # dnf -y install 'dnf-command(config-manager)' && \
-    # dnf -y install globus-connect-server54 && \
     pip3 install --upgrade globus-cli && \
     adduser gridftp
 
@@ -25,10 +26,27 @@ RUN cd /root && \
     tar xzvf /root/globusconnectpersonal-latest.tgz -C /home/gridftp && \
     chown -R gridftp.gridftp /home/gridftp/globus*
 
-ADD gridftp.conf /etc/gridftp.conf
-ADD globus-connect-server.conf /etc/globus-connect-server.conf
-ADD --chown=gridftp:gridftp --chmod=744 globus-connect-personal.sh /home/gridftp/globus-connect-personal.sh
+# Copy the script into the container
+COPY globus-connect-personal.sh /home/gridftp/globus-connect-personal.sh
+
+# Make the script executable
+RUN chmod +x /home/gridftp/globus-connect-personal.sh
+
+# Set the entrypoint to run the script conditionally
+CMD if [ "$START_GLOBUS" = "true" ]; then \
+    echo "Starting Globus Connect Personal"; \/
+    su gridftp; \
+    cd /home/gridftp; \
+    bash ./globus-connect-personal.sh; \
+    /bin/bash; \
+    else \
+    /bin/bash; \
+    fi
 
 # globus-connect-server-setup script needs these
 ENV HOME /root
 ENV TERM xterm
+
+# Set default value for RUN_SETUP_SCRIPT
+ENV START_GLOBUS=false
+

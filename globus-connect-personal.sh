@@ -10,6 +10,8 @@
 
 ###  Variables  ###
 
+echo Running Globus Connect Personal script
+
 # GCP config is stored in the .globusonline directory
 gcpconfigdir=.globusonline
 # GCP intallation directory, version and path may change so find dynamically
@@ -27,13 +29,13 @@ fi
 # Check /home/gridftp for existing GCP config
 if [ -d "$gcpconfigdir" ]; then
     # GCP endpoint config exists, start the endpoint
-    "./$gcpdir/globusconnectpersonal" -start
+    "./$gcpdir/globusconnectpersonal" -start -debug
 else
     # Check /data/gridftp-save for GCP endpoint config
-    if [ -d "/data/gridftp-save/$gcpconfigdir" ]; then
+    if [ -d "/home/ferroelectric/globus_config/$gcpconfigdir" ]; then
         # Copy existing config and then start GCP endpoint
-        cp -p -r /data/gridftp-save/.glob* ~
-        "./$gcpdir/globusconnectpersonal" -start
+        cp -p -r /home/ferroelectric/globus_config/.glob* ~
+        "./$gcpdir/globusconnectpersonal" -start -debug
     else
         # Can't find GCP config, sleep for an hour to let user set up config
         sleep 3600
