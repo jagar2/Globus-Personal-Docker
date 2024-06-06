@@ -29,15 +29,16 @@ export GLOBUS_ENDPOINT_ID="$endpoint_id"
 export GLOBUS_SETUP_KEY="$setup_key"
 
 cd /home/gridftp/globusconnectpersonal-**/
+```
 
+```bash
 ./globusconnectpersonal -setup $GLOBUS_SETUP_KEY
+```
 
+```bash
 ./globusconnectpersonal -start &
-
 echo "/home/ferroelectric/data/,0,1" >> ~/.globusonline/lta/config-paths
 cp -p -r /home/gridftp/.globus* /home/ferroelectric/globus_config
-cp -p /home/gridftp/endpoint-info /home/ferroelectric/globus_config
-
 ```
 
 
