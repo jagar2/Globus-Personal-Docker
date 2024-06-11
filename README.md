@@ -7,7 +7,7 @@ This repository contains a Dockerfile for building a Docker image that can be us
 To build the container, run the following command:
 
 ```bash
-docker build -t globus .
+docker build -t globus-datafed .
 ```
 
 ## Running the container
@@ -21,7 +21,7 @@ docker run -e DataPath=$DataPath \
            -e ConfigPath=$ConfigPath \
            -v $ConfigPath:$ConfigPath \
            -v $DataPath:$DataPath \
-           -it globus
+           -it globus-datafed
 ```
 
 ## Setup the Globus Personal Endpoint
@@ -73,5 +73,16 @@ docker run -e DataPath="$DataPath"  \
            -e START_GLOBUS="true" \
            -v "$ConfigPath":"$ConfigPath" \
            -v "$DataPath":"$DataPath" \
-           -it globus
+           -it globus-datafed
 ```
+
+export endpoint_id=$(globus endpoint local-id)
+
+datafed ep default set $endpoint_id
+
+/home/ferroelectric/Globus-Personal-Docker/datafed_test.ipynb
+
+# Notes, to logout you need to remove the files: 
+
+/home/gridftp/.datafed/datafed-user-key.priv
+/home/gridftp/.datafed/datafed-user-key.pub
