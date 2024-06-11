@@ -66,7 +66,7 @@ cp -p -r /home/gridftp/.globus* $ConfigPath
 ## Once the Setup is complete the endpoint can be started using the following command:
 
 ```bash
-DataPath=/home/ferroelectric/data &&
+DataPath=/home/ferroelectric/Documents/ &&
 ConfigPath=/home/ferroelectric/globus_config &&
 docker run -e DataPath="$DataPath"  \
            -e ConfigPath="$ConfigPath" \
