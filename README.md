@@ -15,8 +15,8 @@ docker build -t globus-datafed .
 You need to start by running the container and doing the initial configuration. The following command will start the container and mount the necessary volumes:
 
 ```bash
-DataPath=/home/ferroelectric/data/
-ConfigPath=/home/ferroelectric/globus_config/
+DataPath="/Users/joshuaagar/Globus-Personal-Docker-1/datapath"
+ConfigPath="/Users/joshuaagar/Globus-Personal-Docker-1/configurepath"
 docker run -e DataPath=$DataPath \
            -e ConfigPath=$ConfigPath \
            -v $ConfigPath:$ConfigPath \

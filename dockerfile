@@ -12,24 +12,46 @@ LABEL CONTRIBUTER Kyle Krick <kkrick@sdsu.edu>
 VOLUME /home/ferroelectric/globus_config
 VOLUME /home/ferroelectric/data
 
-# Install necessary packages
-RUN yum -y update && \
-    yum -y install wget rsync openssh-clients epel-release && \
-    yum -y update && \
-    dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
-    yum -y install python3 python3-pip && \
-    pip3 install --upgrade globus-cli && \
-    adduser gridftp
+# Install necessary packages and development tools
+RUN dnf -y update && \
+    dnf -y install wget rsync openssh-clients epel-release gcc make openssl-devel bzip2-devel libffi-devel zlib-devel sqlite-devel && \
+    dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 
-# Install DataFed CLI
-RUN pip3 install datafed
-RUN pip3 install protobuf==3.20.0
+# Install Python 3.11 from source
+RUN cd /usr/src && \
+    wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz && \
+    tar xzf Python-3.11.0.tgz && \
+    cd Python-3.11.0 && \
+    ./configure --enable-optimizations && \
+    make altinstall && \
+    ln -s /usr/local/bin/python3.11 /usr/bin/python3.11 && \
+    ln -s /usr/local/bin/pip3.11 /usr/bin/pip3.11
+
+# Set Python 3.11 as the default python3 and pip3
+RUN ln -sf /usr/bin/python3.11 /usr/bin/python3 && \
+    ln -sf /usr/bin/pip3.11 /usr/bin/pip3
+
+# Upgrade pip and install necessary Python packages
+RUN pip3 install --upgrade pip && \
+    pip3 install --upgrade globus-cli
+
+# Add user for gridftp
+RUN adduser --home /home/gridftp --shell /bin/bash gridftp
+
+# Copy the requirements.txt file into the container
+COPY requirements.txt .
+
+# Install the Python packages specified in requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Install Qt dependencies
+RUN dnf -y install qt5-qtbase qt5-qtmultimedia qt5-qtdeclarative
 
 # Download and setup Globus Connect Personal
 RUN cd /root && \
     wget https://downloads.globus.org/globus-connect-personal/linux/stable/globusconnectpersonal-latest.tgz && \
     tar xzvf /root/globusconnectpersonal-latest.tgz -C /home/gridftp && \
-    chown -R gridftp.gridftp /home/gridftp/globus*
+    chown -R gridftp:gridftp /home/gridftp/globus*
 
 # Copy the script into the container
 COPY globus-connect-personal.sh /home/gridftp/globus-connect-personal.sh
@@ -37,11 +59,19 @@ COPY globus-connect-personal.sh /home/gridftp/globus-connect-personal.sh
 # Make the script executable
 RUN chmod +x /home/gridftp/globus-connect-personal.sh
 
+# Set permissions for .bashrc if needed
+RUN chmod 644 /root/.bashrc
+
+# Set root password
+RUN echo "root:password" | chpasswd
+
+# Switch to the gridftp user for subsequent operations
+USER gridftp
+
 # Set the command to execute
 CMD if [ "$START_GLOBUS" = "true" ]; then \
     echo "Starting Globus Connect Personal"; \
-    su gridftp -c 'cd /home/gridftp && source ./globus-connect-personal.sh'; \
-    /bin/bash -i; \
+    cd /home/gridftp && ./globus-connect-personal.sh && /bin/bash -i; \
     else \
     /bin/bash -i; \
     fi
@@ -50,7 +80,5 @@ CMD if [ "$START_GLOBUS" = "true" ]; then \
 ENV HOME /root
 ENV TERM xterm
 
-# Set default value for RUN_SETUP_SCRIPT
+# Set default value for START_GLOBUS
 ENV START_GLOBUS=false
-
-
