@@ -70,10 +70,11 @@ USER gridftp
 
 # Set the command to execute
 CMD if [ "$START_GLOBUS" = "true" ]; then \
+    su gridftp; \
     echo "Starting Globus Connect Personal"; \
     cd /home/gridftp && ./globus-connect-personal.sh && /bin/bash -i; \
     else \
-    /bin/bash -i; \
+    su gridftp -c /bin/bash -i; \
     fi
 
 # globus-connect-server-setup script needs these
