@@ -1,0 +1,7 @@
+FROM continuumio/miniconda3
+
+LABEL MAINTAINER Joshua C. Agar <jca92@drexel.edu>
+
+# Install necessary packages and development tools
+RUN pip3 install pyqt5
+RUN pip3 install datafed

@@ -9,8 +9,6 @@ FROM rockylinux:9
 LABEL MAINTAINER Nadya Williams <nwilliams@ucsd.edu>
 LABEL CONTRIBUTER Kyle Krick <kkrick@sdsu.edu>
 
-VOLUME /home/ferroelectric/globus_config
-VOLUME /home/ferroelectric/data
 
 # Install necessary packages and development tools
 RUN dnf -y update && \

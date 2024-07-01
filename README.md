@@ -21,7 +21,10 @@ docker run -e DataPath=$DataPath \
            -e ConfigPath=$ConfigPath \
            -v $ConfigPath:$ConfigPath \
            -v $DataPath:$DataPath \
-           -it globus-datafed
+           -it jagar2/globus-datafed:latest
+           
+           
+           globus-datafed
 ```
 
 ## Setup the Globus Personal Endpoint

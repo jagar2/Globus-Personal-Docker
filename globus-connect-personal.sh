@@ -32,9 +32,9 @@ if [ -d "$gcpconfigdir" ]; then
     nohup "./$gcpdir/globusconnectpersonal" -start & disown
 else
     # Check /data/gridftp-save for GCP endpoint config
-    if [ -d "/home/ferroelectric/globus_config/$gcpconfigdir" ]; then
+    if [ -d "${DataPath}/globus_config/$gcpconfigdir" ]; then
         # Copy existing config and then start GCP endpoint
-        cp -p -r /home/ferroelectric/globus_config/.glob* ~
+        cp -p -r "${DataPath}/globus_config/.glob*" ~
         nohup "./$gcpdir/globusconnectpersonal" -start & disown
     else
         # Can't find GCP config, sleep for an hour to let user set up config
