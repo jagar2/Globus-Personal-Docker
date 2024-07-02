@@ -5,3 +5,8 @@ LABEL MAINTAINER Joshua C. Agar <jca92@drexel.edu>
 # Install necessary packages and development tools
 RUN pip3 install pyqt5
 RUN pip3 install datafed
+
+# Copy the requirements.txt file into the container
+COPY ./UI ./UI
+
+#sudo apt-get install libxcb-xinerama0
