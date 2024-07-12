@@ -6,7 +6,34 @@ LABEL MAINTAINER Joshua C. Agar <jca92@drexel.edu>
 RUN pip3 install pyqt5
 RUN pip3 install datafed
 
-# Copy the requirements.txt file into the container
-COPY ./UI ./UI
+# Install dependencies and build tools
+RUN apt-get update && apt-get install -y \
+    xauth \
+    xorg \
+    libgl1-mesa-glx \
+    libxkbcommon-x11-0 \
+    libxcb1 \
+    libxcb-render0 \
+    libxcb-shape0 \
+    libxcb-xfixes0 \
+    build-essential \
+    qt5-qmake \
+    qtbase5-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-#sudo apt-get install libxcb-xinerama0
+
+# Set environment variables for X11
+ENV DISPLAY=:0
+ENV QT_X11_NO_MITSHM=1
+
+
+# Copy the application code to the container
+COPY . /app
+COPY ./UI /UI
+
+# Set the working directory
+WORKDIR /UI
+
+# Run the application
+CMD ["python", "helloworld.py"]
