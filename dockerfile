@@ -1,8 +1,8 @@
 FROM rockylinux:9
 
 # Env var defaults
-ENV HOME /root
-ENV TERM xterm
+ENV HOME=/root
+ENV TERM=xterm
 ENV START_GLOBUS=false
 
 # Install necessary packages
