@@ -27,7 +27,11 @@ Once the container is running, you can set up the Globus Connect Personal
 endpoint by running the following commands:
 
 ```sh
-su - gridftp && globus login --no-local-server
+su - gridftp
+```
+
+```sh
+globus login --no-local-server
 ```
 
 ### Collect information about endpoint
