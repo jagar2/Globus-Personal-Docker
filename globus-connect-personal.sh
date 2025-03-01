@@ -35,7 +35,7 @@ fi
 # Check mounted config directory
 if [ -d "$MAPPED_CONFIG_DIR/$GCP_CONFIG_DIR" ]; then
 	echo "Copying existing GCP configuration..."
-	cp -pr "$MAPPED_CONFIG_DIR/.glob*" "$HOME/"
+	cp -pr "$MAPPED_CONFIG_DIR"/.glob* "$HOME/"
 	exec "$GCP_DIR/globusconnectpersonal" -start
 fi
 

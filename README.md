@@ -72,8 +72,8 @@ cd globusconnectpersonal-** && \
 
 ```sh
 ./globusconnectpersonal -start &
-echo "/var/gcp/data,0,1" >> ~/.globusonline/lta/config-paths
-cp -pr "/home/gridftp/.globus*" /var/gcp/globus_config
+echo /var/gcp/data,0,1 >> ~/.globusonline/lta/config-paths
+cp -pr ~/.globus* /var/gcp/globus_config
 ```
 
 ## Start already-set-up endpoint
