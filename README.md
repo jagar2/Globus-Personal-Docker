@@ -23,8 +23,12 @@ docker run \
 
 ## Set up GCP endpoint
 
-Once the container is running, you can setup the Globus Personal Endpoint by
-running the following commands:
+Once the container is running, you can set up the Globus Connect Personal
+endpoint by running the following commands:
+
+```sh
+su - gridftp
+```
 
 ```sh
 globus login --no-local-server
@@ -33,25 +37,25 @@ globus login --no-local-server
 ### Collect information about endpoint
 
 ```sh
-endpoint_info=$(globus endpoint create --personal myep 2>&1)
+ENDPOINT_INFO=$(globus endpoint create --personal myep 2>&1)
 ```
 
 ```sh
-endpoint_id=$(echo "$endpoint_info" | grep -oP 'Endpoint ID: \K[0-9a-f-]+')
+ENDPOINT_ID=$(echo "$ENDPOINT_INFO" | grep -oP 'Endpoint ID: \K[0-9a-f-]+')
 ```
 
 ```sh
-setup_key=$(echo "$endpoint_info" | grep -oP 'Setup Key: \K[0-9a-f-]+')
+SETUP_KEY=$(echo "$ENDPOINT_INFO" | grep -oP 'Setup Key: \K[0-9a-f-]+')
 ```
 
 ### Set env vars
 
 ```sh
-export GLOBUS_ENDPOINT_ID="$endpoint_id"
+export GLOBUS_ENDPOINT_ID="$ENDPOINT_ID"
 ```
 
 ```sh
-export GLOBUS_SETUP_KEY="$setup_key"
+export GLOBUS_SETUP_KEY="$SETUP_KEY"
 ```
 
 ### Finish endpoint setup
