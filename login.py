@@ -1,14 +1,15 @@
 import sys
+
+from datafed import Client
 from PyQt5.QtWidgets import (
     QApplication,
-    QWidget,
     QLabel,
     QLineEdit,
+    QMessageBox,
     QPushButton,
     QVBoxLayout,
-    QMessageBox,
+    QWidget,
 )
-from datafed import Client
 
 
 class LoginWindow(QWidget):
