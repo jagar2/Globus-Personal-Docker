@@ -27,6 +27,10 @@ Once the container is running, you can set up the Globus Connect Personal
 endpoint by running the following commands:
 
 ```sh
+chown -R gridftp:gridftp /var/gcp
+```
+
+```sh
 su - gridftp
 ```
 
@@ -41,11 +45,11 @@ ENDPOINT_INFO=$(globus gcp create mapped myep 2>&1)
 ```
 
 ```sh
-ENDPOINT_ID=$(echo "$ENDPOINT_INFO" | grep -oP 'Collection ID: \K[0-9a-f-]+')
+ENDPOINT_ID=$(echo "$ENDPOINT_INFO" | grep -oP 'Collection ID:\s+\K[0-9a-f-]+')
 ```
 
 ```sh
-SETUP_KEY=$(echo "$ENDPOINT_INFO" | grep -oP 'Setup Key: \K[0-9a-f-]+')
+SETUP_KEY=$(echo "$ENDPOINT_INFO" | grep -oP 'Setup Key:\s+\K[0-9a-f-]+')
 ```
 
 ### Set env vars
