@@ -37,11 +37,11 @@ globus login --no-local-server
 ### Collect information about endpoint
 
 ```sh
-ENDPOINT_INFO=$(globus endpoint create --personal myep 2>&1)
+ENDPOINT_INFO=$(globus gcp create mapped myep 2>&1)
 ```
 
 ```sh
-ENDPOINT_ID=$(echo "$ENDPOINT_INFO" | grep -oP 'Endpoint ID: \K[0-9a-f-]+')
+ENDPOINT_ID=$(echo "$ENDPOINT_INFO" | grep -oP 'Collection ID: \K[0-9a-f-]+')
 ```
 
 ```sh
