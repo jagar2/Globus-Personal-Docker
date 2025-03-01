@@ -1,23 +1,18 @@
 # Globus-Personal-Docker
 
 This repository contains a Dockerfile for building a Docker image that can be
-used to run a personal Globus Connect Server. The image is based on the
+used to run a Globus Connect Personal endpoint. The image is based on the
 [globus/globus-connect-server](https://hub.docker.com/r/globus/globus-connect-server)
 image, and adds a script that can be used to configure the server with a
 personal endpoint.
 
-## Building the container
-
-To build the container, run the following command:
+## Build container
 
 ```sh
 docker build -t globus .
 ```
 
-## Running the container
-
-You need to start by running the container and doing the initial configuration.
-The following command will start the container and mount the necessary volumes:
+## Run container for setup
 
 ```sh
 docker run \
@@ -26,7 +21,7 @@ docker run \
          -it globus
 ```
 
-## Setup the Globus Personal Endpoint
+## Set up GCP endpoint
 
 Once the container is running, you can setup the Globus Personal Endpoint by
 running the following commands:
@@ -35,7 +30,7 @@ running the following commands:
 globus login --no-local-server
 ```
 
-## Collect information about the endpoint
+### Collect information about endpoint
 
 ```sh
 endpoint_info=$(globus endpoint create --personal myep 2>&1)
@@ -49,7 +44,7 @@ endpoint_id=$(echo "$endpoint_info" | grep -oP 'Endpoint ID: \K[0-9a-f-]+')
 setup_key=$(echo "$endpoint_info" | grep -oP 'Setup Key: \K[0-9a-f-]+')
 ```
 
-## Set the environment variables
+### Set env vars
 
 ```sh
 export GLOBUS_ENDPOINT_ID="$endpoint_id"
@@ -59,17 +54,17 @@ export GLOBUS_ENDPOINT_ID="$endpoint_id"
 export GLOBUS_SETUP_KEY="$setup_key"
 ```
 
+### Finish endpoint setup
+
 ```sh
 cd /home/gridftp/globusconnectpersonal-**
 ```
-
-## Finish the Endpoint Setup
 
 ```sh
 ./globusconnectpersonal -setup $GLOBUS_SETUP_KEY
 ```
 
-## Add Path and Start the Endpoint
+### Add path and start endpoint
 
 ```sh
 ./globusconnectpersonal -start &
@@ -77,7 +72,7 @@ echo "/var/gcp/data,0,1" >> ~/.globusonline/lta/config-paths
 cp -pr "/home/gridftp/.globus*" /var/gcp/globus_config
 ```
 
-## Once the Setup is complete the endpoint can be started using the following command
+## Start already-set-up endpoint
 
 ```sh
 docker run \
