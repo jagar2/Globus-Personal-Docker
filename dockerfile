@@ -1,49 +1,36 @@
-# Globus Connect/GridFTP container
-# https://www.globus.org/globus-connect-server
-# includes GridFTP and Globus Connect
-# also includes some network test tools
-# Nadya Williams: add globusconnectpersonal tools
-# to globus-connect created by John Graham
-
 FROM rockylinux:9
-LABEL MAINTAINER Nadya Williams <nwilliams@ucsd.edu>
-LABEL CONTRIBUTER Kyle Krick <kkrick@sdsu.edu>
 
-VOLUME /home/ferroelectric/globus_config
-VOLUME /home/ferroelectric/data
+# Env var defaults
+ENV HOME /root
+ENV TERM xterm
+ENV START_GLOBUS=false
 
 # Install necessary packages
-RUN yum -y update && \
-    yum -y install wget rsync openssh-clients python pip && \
-    yum -y install epel-release && \
-    yum -y update && \
+RUN dnf -y update && \
+    dnf -y install wget rsync openssh-clients python3 python3-pip && \
     dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
+    dnf clean all && \
     pip3 install --upgrade globus-cli && \
     adduser gridftp
 
-RUN cd /root && \
-    wget https://downloads.globus.org/globus-connect-personal/linux/stable/globusconnectpersonal-latest.tgz && \
-    tar xzvf /root/globusconnectpersonal-latest.tgz -C /home/gridftp && \
-    chown -R gridftp.gridftp /home/gridftp/globus*
+# We will bind mount these directories
+RUN mkdir -p /var/gcp/globus_config /var/gcp/data && \
+    chown -R gridftp:gridftp /var/gcp
 
-# Copy the script into the container
-COPY globus-connect-personal.sh /home/gridftp/globus-connect-personal.sh
+# Download and extract Globus Connect Personal
+RUN wget -O /root/globusconnectpersonal-latest.tgz \
+    https://downloads.globus.org/globus-connect-personal/linux/stable/globusconnectpersonal-latest.tgz && \
+    tar xzf /root/globusconnectpersonal-latest.tgz -C /home/gridftp
 
-# Make the script executable
-RUN chmod +x /home/gridftp/globus-connect-personal.sh
+# Copy script into container; make it executable; give gridftp ownership
+COPY globus-connect-personal.sh /home/gridftp/
+RUN chmod +x /home/gridftp/globus-connect-personal.sh && \
+    chown -R gridftp:gridftp /home/gridftp
 
 CMD if [ "$START_GLOBUS" = "true" ]; then \
-    echo "Starting Globus Connect Personal"; \
-    su gridftp -c 'cd /home/gridftp && source ./globus-connect-personal.sh'; \
-    /bin/bash -i; \
+    echo "Starting Globus Connect Personal" && \
+    su - gridftp -c "/home/gridftp/globus-connect-personal.sh" && \
+    exec /bin/bash -i; \
     else \
-    /bin/bash -i; \
+    exec /bin/bash -i; \
     fi
-
-# globus-connect-server-setup script needs these
-ENV HOME /root
-ENV TERM xterm
-
-# Set default value for RUN_SETUP_SCRIPT
-ENV START_GLOBUS=false
-
