@@ -14,6 +14,8 @@ docker build -t globus .
 
 ## Run container for setup
 
+Adjust paths on the host side as appropriate!
+
 ```sh
 docker run \
          -v ~/gcp/globus_config:/var/gcp/globus_config \
