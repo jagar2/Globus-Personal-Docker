@@ -84,6 +84,8 @@ cp -pr ~/.globus* /var/gcp/globus_config
 
 ## Start already-set-up endpoint
 
+Again, adjust paths on the host side as appropriate!
+
 ```sh
 docker run \
          -e START_GLOBUS='true' \
