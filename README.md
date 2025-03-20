@@ -18,9 +18,9 @@ Adjust paths on the host side as appropriate!
 
 ```sh
 docker run \
-         -v ~/gcp/globus_config:/var/gcp/globus_config \
-         -v ~/gcp/data:/var/gcp/data \
-         -it globus
+    -v ~/gcp/globus_config:/var/gcp/globus_config \
+    -v ~/gcp/data:/var/gcp/data \
+    -it globus
 ```
 
 ## Set up GCP endpoint
@@ -70,16 +70,19 @@ NB, because we switched to the gridftp user earlier, we should be in
 `/home/gridftp`.
 
 ```sh
-cd globusconnectpersonal-** && \
-./globusconnectpersonal -setup $GLOBUS_SETUP_KEY
+cd globusconnectpersonal-** \
+&& ./globusconnectpersonal -setup "$GLOBUS_SETUP_KEY"
 ```
 
-### Add path and start endpoint
+### Start endpoint and persist config
 
 ```sh
 ./globusconnectpersonal -start &
-echo /var/gcp/data,0,1 >> ~/.globusonline/lta/config-paths
-cp -pr ~/.globus* /var/gcp/globus_config
+```
+
+```sh
+echo /var/gcp/data,0,1 >> ~/.globusonline/lta/config-paths \
+&& cp -pR ~/.globus* /var/gcp/globus_config/
 ```
 
 ## Start already-set-up endpoint
@@ -88,8 +91,18 @@ Again, adjust paths on the host side as appropriate!
 
 ```sh
 docker run \
-         -e START_GLOBUS='true' \
-         -v ~/gcp/globus_config:/var/gcp/globus_config \
-         -v ~/gcp/data:/var/gcp/data \
-         -it globus
+    -e START_GLOBUS='true' \
+    -v ~/gcp/globus_config:/var/gcp/globus_config \
+    -v ~/gcp/data:/var/gcp/data \
+    -it globus
+```
+
+It may be preferable to run the container in the background:
+
+```sh
+docker run \
+    -e START_GLOBUS='true' \
+    -v ~/gcp/globus_config:/var/gcp/globus_config \
+    -v ~/gcp/data:/var/gcp/data \
+    -d globus
 ```
