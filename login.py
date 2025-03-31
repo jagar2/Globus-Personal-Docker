@@ -1,6 +1,16 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox
+
 from datafed import Client
+from PyQt5.QtWidgets import (
+    QApplication,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
+)
+
 
 class LoginWindow(QWidget):
     def __init__(self):
@@ -36,9 +46,13 @@ class LoginWindow(QWidget):
         password = self.password_input.text()
 
         if self.authenticate_user(username, password):
-            QMessageBox.information(self, "Login Successful", "You have successfully logged in!")
+            QMessageBox.information(
+                self, "Login Successful", "You have successfully logged in!"
+            )
         else:
-            QMessageBox.warning(self, "Login Failed", "Invalid username or password. Please try again.")
+            QMessageBox.warning(
+                self, "Login Failed", "Invalid username or password. Please try again."
+            )
 
     def authenticate_user(self, username, password):
         try:
@@ -48,6 +62,7 @@ class LoginWindow(QWidget):
         except Exception as e:
             print(f"Login failed: {e}")
             return False
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
