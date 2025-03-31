@@ -1,0 +1,3 @@
+[submodule "doc-base"]
+	path = doc-base
+	url = https://github.com/m3-learning/m3-documentation-style.git
