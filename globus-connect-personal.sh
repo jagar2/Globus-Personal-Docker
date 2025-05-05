@@ -21,19 +21,19 @@ MAPPED_CONFIG_DIR='/var/gcp/globus_config'
 ###  Script Start  ###
 
 # Check to make sure GCP_DIR exists
-if [ ! -d "$GCP_DIR" ]; then
+if [[ ! -d "$GCP_DIR" ]]; then
 	echo "Error: Globus Connect Personal directory not found"
 	exit 1
 fi
 
 # Check for existing GCP configuration
-if [ -d "$GCP_CONFIG_DIR" ]; then
+if [[ -d "$GCP_CONFIG_DIR" ]]; then
 	echo "Found existing GCP configuration. Starting endpoint..."
 	exec "$GCP_DIR/globusconnectpersonal" -start
 fi
 
 # Check mounted config directory
-if [ -d "$MAPPED_CONFIG_DIR/$GCP_CONFIG_DIR" ]; then
+if [[ -d "$MAPPED_CONFIG_DIR/$GCP_CONFIG_DIR" ]]; then
 	echo "Copying existing GCP configuration..."
 	cp -pr "$MAPPED_CONFIG_DIR"/.glob* "$HOME/"
 	exec "$GCP_DIR/globusconnectpersonal" -start
