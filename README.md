@@ -44,7 +44,7 @@ globus login --no-local-server
 
 **The next few steps also assume that you remain in the container session.**
 
-### Collect endpoint info and set environment variables
+### Collect endpoint information
 
 ```sh
 ENDPOINT_INFO=$(globus gcp create mapped myep 2>&1) && \
