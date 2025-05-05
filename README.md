@@ -1,4 +1,4 @@
-# Globus-Personal-Docker
+# Globus-Personal-Container
 
 This repository contains a Dockerfile for building an image that can be used to
 run a Globus Connect Personal endpoint. The image is based on
