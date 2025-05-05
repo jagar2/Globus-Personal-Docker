@@ -11,10 +11,6 @@ RUN dnf -y update && \
     pip3 install --upgrade globus-cli && \
     adduser gridftp
 
-# Create directories for Globus configuration and data; set proper ownership
-RUN mkdir -p /var/gcp/globus_config /var/gcp/data && \
-    chown -R gridftp:gridftp /var/gcp
-
 # Download and extract Globus Connect Personal (downloading to /tmp, then cleaning up)
 RUN wget -O /tmp/globusconnectpersonal-latest.tgz \
     https://downloads.globus.org/globus-connect-personal/linux/stable/globusconnectpersonal-latest.tgz && \
@@ -29,8 +25,7 @@ RUN chmod +x /home/gridftp/globus-connect-personal.sh && \
 # Launch GCP, or an interactive shell if configuration is needed
 CMD if [ "$START_GLOBUS" = "true" ]; then \
     echo "Starting Globus Connect Personal" && \
-    su - gridftp -c "/home/gridftp/globus-connect-personal.sh" && \
-    exec /bin/bash -i; \
+    su - gridftp -c "/home/gridftp/globus-connect-personal.sh"; \
     else \
     exec /bin/bash -i; \
     fi
